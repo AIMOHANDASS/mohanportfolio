@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* adjust this based on your navbar height */
+}

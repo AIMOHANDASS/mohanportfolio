@@ -1,24 +1,44 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import './components/animations.css';
+import Navbar from './components/Navbar';
+import Hero from './components/Home';
+import About from './components/About';
+import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Footer from './components/Footer';
+import Certificates from'./components/Certifications';
+
+
 
 function App() {
+  useEffect(() => {
+    const handleScroll = () => {
+      document.querySelectorAll('.about, .skills, .projects, .hero')
+        .forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            el.classList.add('visible');
+          }
+        });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // trigger on load
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar />
+      <Hero />
+      <About />
+      <Skills />
+      <Certificates />
+      <Projects />
+      <Footer />
+    </>
   );
 }
 

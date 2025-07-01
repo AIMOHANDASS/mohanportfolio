@@ -1,0 +1,42 @@
+/* skills.css */
+.skills {
+  padding: 60px 20px;
+  background: linear-gradient(to top, #e0f2fe, #f0f9ff);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s, transform 1s;
+}
+
+.skills.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.skills h3 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #0c4a6e;
+}
+
+.skills div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.skills div > div {
+  background: linear-gradient(to right, #0ea5e9, #38bdf8);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.skills div > div:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
