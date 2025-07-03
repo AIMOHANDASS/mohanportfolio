@@ -1,6 +1,4 @@
-// File: src/components/Footer.jsx
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import "./footer.css";
@@ -8,31 +6,33 @@ import "./footer.css";
 export default function Footer() {
   const [showForm, setShowForm] = useState(false);
   const [question, setQuestion] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile device
-  const isMobileDevice = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-  };
+  useEffect(() => {
+    const checkMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      setIsMobile(/android|iphone|ipad|iPod|windows phone/i.test(userAgent.toLowerCase()));
+    };
+    checkMobile();
+  }, []);
 
-  // Handle "Send" button
   const handleSubmit = () => {
     const subject = "Question from Portfolio";
     const body = encodeURIComponent(question);
 
-    // Compose Gmail link
-    const gmailLinkDesktop = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(
-      subject
-    )}&body=${body}`;
-
-    const mailtoLink = `mailto:mohan113moha@gmail.com?subject=${encodeURIComponent(
-      subject
-    )}&body=${body}`;
-
-    const finalLink = isMobileDevice() ? mailtoLink : gmailLinkDesktop;
-
-    window.open(finalLink, "_blank");
+    if (isMobile) {
+      // 📱 Mobile: Opens Gmail App or email app
+      const mailtoLink = `mailto:mohan113moha@gmail.com?subject=${encodeURIComponent(
+        subject
+      )}&body=${body}`;
+      window.location.href = mailtoLink;
+    } else {
+      // 💻 Desktop: Opens Gmail Web Compose
+      const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(
+        subject
+      )}&body=${body}`;
+      window.open(gmailLink, "_blank");
+    }
 
     setShowForm(false);
     setQuestion("");
@@ -46,25 +46,27 @@ export default function Footer() {
       viewport={{ once: false, amount: 0.3 }}
       className="footer-container"
     >
-      {/* SVG Animated Wave */}
-      <svg className="wave-top" viewBox="0 0 1440 320">
+      {/* SVG Wave */}
+      <svg className="wave-top" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <path
           fill="#1e40af"
           fillOpacity="1"
-          d="M0,128L40,112C80,96,160,64,240,64C320,64,400,96,480,106.7C560,117,640,107,720,106.7C800,107,880,117,960,128C1040,139,1120,149,1200,144C1280,139,1360,117,1400,106.7L1440,96L1440,0L0,0Z"
+          d="M0,224L30,213.3C60,203,120,181,180,165.3C240,149,300,139,360,133.3C420,128,480,128,540,144C600,160,660,192,720,213.3C780,235,840,245,900,234.7C960,224,1020,192,1080,170.7C1140,149,1200,139,1260,149.3C1320,160,1380,192,1410,208L1440,224L1440,0L1410,0C1380,0,1320,0,1260,0C1200,0,1140,0,1080,0C1020,0,960,0,900,0C840,0,780,0,720,0C660,0,600,0,540,0C480,0,420,0,360,0C300,0,240,0,180,0C120,0,60,0,30,0L0,0Z"
         />
       </svg>
 
       <footer className="footer-main">
         <div className="footer-grid">
-          {/* Left: Contact Details */}
+          {/* Contact Section */}
           <div className="footer-left">
             <h2>Let's Connect</h2>
             <div className="contact-icons">
               <a
-                href={isMobileDevice()
-                  ? "mailto:mohan113moha@gmail.com"
-                  : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"}
+                href={
+                  isMobile
+                    ? "mailto:mohan113moha@gmail.com"
+                    : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Email"
@@ -90,7 +92,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Right: Ask a Question */}
+          {/* Ask a Question Form */}
           <div className="footer-right">
             {!showForm ? (
               <button onClick={() => setShowForm(true)} className="ask-btn-ux">
