@@ -8,11 +8,16 @@ export default function Footer() {
   const [question, setQuestion] = useState("");
   const [isMobile, setIsMobile] = useState(false);
 
+  // ✅ Accurate Mobile Device Detection
   useEffect(() => {
-    const ua = navigator.userAgent.toLowerCase();
-    setIsMobile(/android|iphone|ipad|ipod/.test(ua));
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isMobileDevice =
+      /android|iphone|ipad|ipod/i.test(ua) && !navigator.userAgent.includes("Macintosh");
+
+    setIsMobile(isMobileDevice);
   }, []);
 
+  // ✅ Handle form submit: mobile opens mail app, desktop opens Gmail compose
   const handleSubmit = () => {
     const subject = "Question from Portfolio";
     const body = encodeURIComponent(question);
@@ -31,13 +36,15 @@ export default function Footer() {
     setQuestion("");
   };
 
-  const getLinkedInLink = () => {
-  return "https://linkedin.com/in/mohan-m1105";
-};
+  // ✅ Gmail and LinkedIn Links
   const getGmailLink = () => {
     return isMobile
       ? "mailto:mohan113moha@gmail.com"
       : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com";
+  };
+
+  const getLinkedInLink = () => {
+    return "https://linkedin.com/in/mohan-m1105";
   };
 
   return (
@@ -59,7 +66,7 @@ export default function Footer() {
 
       <footer className="footer-main">
         <div className="footer-grid">
-          {/* Contact Section */}
+          {/* Left: Contact Section */}
           <div className="footer-left">
             <h2>Let's Connect</h2>
             <div className="contact-icons">
@@ -85,7 +92,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Ask a Question Section */}
+          {/* Right: Ask a Question Section */}
           <div className="footer-right">
             {!showForm ? (
               <button onClick={() => setShowForm(true)} className="ask-btn-ux">
