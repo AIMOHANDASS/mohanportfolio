@@ -1,3 +1,5 @@
+// File: src/components/Footer.jsx
+
 import React, { useState, useEffect } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -6,32 +8,41 @@ import "./footer.css";
 export default function Footer() {
   const [showForm, setShowForm] = useState(false);
   const [question, setQuestion] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
+  const [deviceType, setDeviceType] = useState("desktop");
 
   useEffect(() => {
-    const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      setIsMobile(/android|iphone|ipad|iPod|windows phone/i.test(userAgent.toLowerCase()));
-    };
-    checkMobile();
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if (/android/i.test(userAgent)) {
+      setDeviceType("android");
+    } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      setDeviceType("ios");
+    } else {
+      setDeviceType("desktop");
+    }
   }, []);
 
   const handleSubmit = () => {
     const subject = "Question from Portfolio";
     const body = encodeURIComponent(question);
 
-    if (isMobile) {
-      // 📱 Mobile: Opens Gmail App or email app
-      const mailtoLink = `mailto:mohan113moha@gmail.com?subject=${encodeURIComponent(
+    if (deviceType === "android") {
+      // 📱 Android Gmail app
+      const androidIntent = `intent://compose?to=mohan113moha@gmail.com&subject=${encodeURIComponent(
+        subject
+      )}&body=${body}#Intent;scheme=mailto;package=com.google.android.gm;end`;
+      window.location.href = androidIntent;
+    } else if (deviceType === "ios") {
+      // 🍎 iOS Gmail app
+      const iosLink = `googlegmail:///co?to=mohan113moha@gmail.com&subject=${encodeURIComponent(
         subject
       )}&body=${body}`;
-      window.location.href = mailtoLink;
+      window.location.href = iosLink;
     } else {
-      // 💻 Desktop: Opens Gmail Web Compose
-      const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(
+      // 💻 Desktop Gmail web
+      const webLink = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(
         subject
       )}&body=${body}`;
-      window.open(gmailLink, "_blank");
+      window.open(webLink, "_blank");
     }
 
     setShowForm(false);
@@ -57,19 +68,18 @@ export default function Footer() {
 
       <footer className="footer-main">
         <div className="footer-grid">
-          {/* Contact Section */}
+          {/* Left: Social Icons */}
           <div className="footer-left">
             <h2>Let's Connect</h2>
             <div className="contact-icons">
               <a
                 href={
-                  isMobile
-                    ? "mailto:mohan113moha@gmail.com"
-                    : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"
+                  deviceType === "desktop"
+                    ? "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"
+                    : "mailto:mohan113moha@gmail.com"
                 }
-                target="_blank"
-                rel="noopener noreferrer"
                 title="Email"
+                rel="noopener noreferrer"
               >
                 <FaEnvelope />
               </a>
@@ -92,7 +102,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Ask a Question Form */}
+          {/* Right: Ask a Question */}
           <div className="footer-right">
             {!showForm ? (
               <button onClick={() => setShowForm(true)} className="ask-btn-ux">
