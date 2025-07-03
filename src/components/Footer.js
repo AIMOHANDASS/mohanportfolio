@@ -1,3 +1,5 @@
+// File: src/components/Footer.jsx
+
 import React, { useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
@@ -7,21 +9,31 @@ export default function Footer() {
   const [showForm, setShowForm] = useState(false);
   const [question, setQuestion] = useState("");
 
-  // Detect if device is mobile
+  // Detect mobile device
   const isMobileDevice = () => {
-    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
   };
 
+  // Handle "Send" button
   const handleSubmit = () => {
     const subject = "Question from Portfolio";
     const body = encodeURIComponent(question);
 
-    const mobileLink = `mailto:mohan113moha@gmail.com?subject=${subject}&body=${body}`;
-    const desktopLink = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${subject}&body=${body}`;
+    // Compose Gmail link
+    const gmailLinkDesktop = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(
+      subject
+    )}&body=${body}`;
 
-    const finalLink = isMobileDevice() ? mobileLink : desktopLink;
+    const mailtoLink = `mailto:mohan113moha@gmail.com?subject=${encodeURIComponent(
+      subject
+    )}&body=${body}`;
+
+    const finalLink = isMobileDevice() ? mailtoLink : gmailLinkDesktop;
 
     window.open(finalLink, "_blank");
+
     setShowForm(false);
     setQuestion("");
   };
@@ -34,7 +46,7 @@ export default function Footer() {
       viewport={{ once: false, amount: 0.3 }}
       className="footer-container"
     >
-      {/* SVG Wave */}
+      {/* SVG Animated Wave */}
       <svg className="wave-top" viewBox="0 0 1440 320">
         <path
           fill="#1e40af"
@@ -50,11 +62,9 @@ export default function Footer() {
             <h2>Let's Connect</h2>
             <div className="contact-icons">
               <a
-                href={
-                  isMobileDevice()
-                    ? "mailto:mohan113moha@gmail.com"
-                    : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"
-                }
+                href={isMobileDevice()
+                  ? "mailto:mohan113moha@gmail.com"
+                  : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Email"
@@ -83,10 +93,7 @@ export default function Footer() {
           {/* Right: Ask a Question */}
           <div className="footer-right">
             {!showForm ? (
-              <button
-                onClick={() => setShowForm(true)}
-                className="ask-btn-ux"
-              >
+              <button onClick={() => setShowForm(true)} className="ask-btn-ux">
                 Ask a Question
               </button>
             ) : (
@@ -107,7 +114,10 @@ export default function Footer() {
                       Send
                     </button>
                     <button
-                      onClick={() => setShowForm(false)}
+                      onClick={() => {
+                        setShowForm(false);
+                        setQuestion("");
+                      }}
                       className="cancel-btn"
                     >
                       Cancel
