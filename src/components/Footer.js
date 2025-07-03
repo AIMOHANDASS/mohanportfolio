@@ -8,35 +8,28 @@ export default function Footer() {
   const [question, setQuestion] = useState("");
   const [isMobile, setIsMobile] = useState(false);
 
-  // ✅ Accurate Mobile Device Detection
   useEffect(() => {
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isMobileDevice =
-      /android|iphone|ipad|ipod/i.test(ua) && !navigator.userAgent.includes("Macintosh");
-
-    setIsMobile(isMobileDevice);
+    const ua = navigator.userAgent.toLowerCase();
+    setIsMobile(/android|iphone|ipad|ipod/.test(ua));
   }, []);
 
-  // ✅ Handle form submit: mobile opens mail app, desktop opens Gmail compose
   const handleSubmit = () => {
     const subject = "Question from Portfolio";
     const body = encodeURIComponent(question);
 
-    const link = isMobile
-      ? `mailto:mohan113moha@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`
-      : `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(subject)}&body=${body}`;
+    const desktopLink = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(subject)}&body=${body}`;
+    const mobileLink = `mailto:mohan113moha@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
 
     if (isMobile) {
-      window.location.href = link;
+      window.location.href = mobileLink;
     } else {
-      window.open(link, "_blank");
+      window.open(desktopLink, "_blank");
     }
 
     setShowForm(false);
     setQuestion("");
   };
 
-  // ✅ Gmail and LinkedIn Links
   const getGmailLink = () => {
     return isMobile
       ? "mailto:mohan113moha@gmail.com"
@@ -66,7 +59,7 @@ export default function Footer() {
 
       <footer className="footer-main">
         <div className="footer-grid">
-          {/* Left: Contact Section */}
+          {/* Contact Section */}
           <div className="footer-left">
             <h2>Let's Connect</h2>
             <div className="contact-icons">
@@ -92,7 +85,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Right: Ask a Question Section */}
+          {/* Ask a Question Section */}
           <div className="footer-right">
             {!showForm ? (
               <button onClick={() => setShowForm(true)} className="ask-btn-ux">
