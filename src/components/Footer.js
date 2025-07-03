@@ -32,11 +32,8 @@ export default function Footer() {
   };
 
   const getLinkedInLink = () => {
-    return isMobile
-      ? "linkedin://in/mohan-m1105" // Deep link to LinkedIn app
-      : "https://linkedin.com/in/mohan-m1105"; // Fallback for desktop
-  };
-
+  return "https://linkedin.com/in/mohan-m1105";
+};
   const getGmailLink = () => {
     return isMobile
       ? "mailto:mohan113moha@gmail.com"
