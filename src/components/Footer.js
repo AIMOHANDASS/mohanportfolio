@@ -7,9 +7,21 @@ export default function Footer() {
   const [showForm, setShowForm] = useState(false);
   const [question, setQuestion] = useState("");
 
+  // Detect if device is mobile
+  const isMobileDevice = () => {
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  };
+
   const handleSubmit = () => {
-    const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=Question from Portfolio&body=${encodeURIComponent(question)}`;
-    window.open(mailtoLink, "_blank");
+    const subject = "Question from Portfolio";
+    const body = encodeURIComponent(question);
+
+    const mobileLink = `mailto:mohan113moha@gmail.com?subject=${subject}&body=${body}`;
+    const desktopLink = `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${subject}&body=${body}`;
+
+    const finalLink = isMobileDevice() ? mobileLink : desktopLink;
+
+    window.open(finalLink, "_blank");
     setShowForm(false);
     setQuestion("");
   };
@@ -22,8 +34,7 @@ export default function Footer() {
       viewport={{ once: false, amount: 0.3 }}
       className="footer-container"
     >
-    <footer id="footer" className="footer"></footer>
-      {/* SVG Wave (bottom to top) */}
+      {/* SVG Wave */}
       <svg className="wave-top" viewBox="0 0 1440 320">
         <path
           fill="#1e40af"
@@ -39,7 +50,11 @@ export default function Footer() {
             <h2>Let's Connect</h2>
             <div className="contact-icons">
               <a
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"
+                href={
+                  isMobileDevice()
+                    ? "mailto:mohan113moha@gmail.com"
+                    : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Email"
