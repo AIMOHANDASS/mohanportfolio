@@ -21,7 +21,6 @@ export default function Footer() {
       ? `mailto:mohan113moha@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`
       : `https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com&su=${encodeURIComponent(subject)}&body=${body}`;
 
-    // Use location for mobile (opens default app), open for desktop
     if (isMobile) {
       window.location.href = link;
     } else {
@@ -30,6 +29,18 @@ export default function Footer() {
 
     setShowForm(false);
     setQuestion("");
+  };
+
+  const getLinkedInLink = () => {
+    return isMobile
+      ? "linkedin://in/mohan-m1105" // Deep link to LinkedIn app
+      : "https://linkedin.com/in/mohan-m1105"; // Fallback for desktop
+  };
+
+  const getGmailLink = () => {
+    return isMobile
+      ? "mailto:mohan113moha@gmail.com"
+      : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com";
   };
 
   return (
@@ -51,20 +62,11 @@ export default function Footer() {
 
       <footer className="footer-main">
         <div className="footer-grid">
-          {/* Left: Contact */}
+          {/* Contact Section */}
           <div className="footer-left">
             <h2>Let's Connect</h2>
             <div className="contact-icons">
-              <a
-                href={
-                  isMobile
-                    ? "mailto:mohan113moha@gmail.com"
-                    : "https://mail.google.com/mail/?view=cm&fs=1&to=mohan113moha@gmail.com"
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Email"
-              >
+              <a href={getGmailLink()} title="Email" rel="noopener noreferrer">
                 <FaEnvelope />
               </a>
               <a
@@ -76,17 +78,17 @@ export default function Footer() {
                 <FaGithub />
               </a>
               <a
-                href="https://linkedin.com/in/mohan-m1105"
+                href={getLinkedInLink()}
+                title="LinkedIn"
                 target="_blank"
                 rel="noreferrer"
-                title="LinkedIn"
               >
                 <FaLinkedin />
               </a>
             </div>
           </div>
 
-          {/* Right: Ask a Question */}
+          {/* Ask a Question Section */}
           <div className="footer-right">
             {!showForm ? (
               <button onClick={() => setShowForm(true)} className="ask-btn-ux">
